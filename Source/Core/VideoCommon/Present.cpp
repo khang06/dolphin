@@ -152,9 +152,13 @@ bool Presenter::FetchXFB(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_heigh
   {
     m_xfb_entry =
         g_texture_cache->GetXFBTexture(xfb_addr, fb_width, fb_height, fb_stride, &m_xfb_rect);
-    m_last_xfb_id = m_xfb_entry->id;
 
-    m_xfb_entry->AcquireContentLock();
+    if (m_xfb_entry != nullptr)
+    {
+      m_last_xfb_id = m_xfb_entry->id;
+
+      m_xfb_entry->AcquireContentLock();
+    }
   }
   m_last_xfb_addr = xfb_addr;
   m_last_xfb_ticks = ticks;
