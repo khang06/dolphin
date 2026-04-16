@@ -24,6 +24,9 @@
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/System.h"
 
+// FUZZER
+#include "Core/Fuzzer.h"
+
 namespace
 {
 // Determines whether or not the given instruction is one where its execution

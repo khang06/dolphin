@@ -375,12 +375,13 @@ if(ENABLE_LLVM)
 endif()
 
 if(UNIX)
+  # FUZZER
   # Posix networking code needs to be fixed for Windows
-  add_executable(traversal_server TraversalServer.cpp)
-  target_link_libraries(traversal_server PRIVATE common fmt::fmt)
-  if(SYSTEMD_FOUND)
-    target_link_libraries(traversal_server PRIVATE ${SYSTEMD_LIBRARIES})
-  endif()
+  #add_executable(traversal_server TraversalServer.cpp)
+  #target_link_libraries(traversal_server PRIVATE common fmt::fmt)
+  #if(SYSTEMD_FOUND)
+  #  target_link_libraries(traversal_server PRIVATE ${SYSTEMD_LIBRARIES})
+  #endif()
 elseif(WIN32)
   find_package(PowerShell REQUIRED)
   execute_process(

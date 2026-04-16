@@ -247,7 +247,10 @@ CPUCore DefaultCPUCore()
 #elif defined(_M_ARM_64)
   return CPUCore::JITARM64;
 #else
-  return CPUCore::CachedInterpreter;
+  // FUZZER
+  // OOM killer kills Dolphin on cached interpreter, even with fastmem off...
+  //return CPUCore::CachedInterpreter;
+  return CPUCore::Interpreter;
 #endif
 }
 

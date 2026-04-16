@@ -29,6 +29,12 @@
 #endif
 #include "UICommon/UICommon.h"
 
+// FUZZER
+#include "Core/Boot/DolReader.h"
+static constexpr u8 g_fuzz_dol[] = {
+#embed "../../../Harness/Harness.dol"
+};
+
 static std::unique_ptr<Platform> s_platform;
 
 static void signal_handler(int)
@@ -210,7 +216,10 @@ int main(const int argc, char* argv[])
 #endif
       });
 
-  optparse::Values& options = CommandLineParse::ParseArguments(parser.get(), argc, argv);
+  // FUZZER
+  // optparse::Values& options = CommandLineParse::ParseArguments(parser.get(), argc, argv);
+  std::vector<std::string> fuzz_args = {"--platform", "headless", "--video_backend", "Null"};
+  optparse::Values& options = CommandLineParse::ParseArguments(parser.get(), fuzz_args);
   std::vector<std::string> args = parser->args();
 
   std::optional<std::string> save_state_path;
@@ -219,6 +228,8 @@ int main(const int argc, char* argv[])
     save_state_path = static_cast<const char*>(options.get("save_state"));
   }
 
+  // FUZZER
+  /*
   std::unique_ptr<BootParameters> boot;
   bool game_specified = false;
   if (options.is_set("exec"))
@@ -254,6 +265,11 @@ int main(const int argc, char* argv[])
     parser->print_help();
     return 0;
   }
+  */
+  auto dol_reader = std::make_unique<DolReader>(std::vector(g_fuzz_dol, g_fuzz_dol + sizeof(g_fuzz_dol)));
+  std::unique_ptr<BootParameters> boot =
+      std::make_unique<BootParameters>(BootParameters::Executable{"dummy", std::move(dol_reader)});
+  bool game_specified = true;
 
   std::string user_directory;
   if (options.is_set("user"))

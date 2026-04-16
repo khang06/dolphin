@@ -27,6 +27,7 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
+#include "Core/Fuzzer.h"
 #include "Core/HW/AudioInterface.h"
 #include "Core/HW/DSP.h"
 #include "Core/HW/DVD/DVDInterface.h"
@@ -84,6 +85,9 @@ void MemoryManager::InitMMIO(Core::System& system)
     system.GetExpansionInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0D006800);
     system.GetAudioInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0D006C00);
   }
+
+  // FUZZER
+  Fuzzer::RegisterMMIO(m_mmio_mapping.get(), 0x0C007000);
 }
 
 void MemoryManager::Init()

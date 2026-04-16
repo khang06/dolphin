@@ -12,6 +12,18 @@
 
 namespace MMIO
 {
+// FUZZER
+void Mapping::DumpHandlers()
+{
+  DumpReadHandlers<u8>(m_read_handlers8);
+  DumpReadHandlers<u16>(m_read_handlers16);
+  DumpReadHandlers<u32>(m_read_handlers32);
+  
+  DumpWriteHandlers<u8>(m_write_handlers8);
+  DumpWriteHandlers<u16>(m_write_handlers16);
+  DumpWriteHandlers<u32>(m_write_handlers32);
+}
+
 // Base classes for the two handling method hierarchies. Note that a single
 // class can inherit from both.
 //

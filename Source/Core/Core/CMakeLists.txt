@@ -124,6 +124,8 @@ add_library(core
   FifoPlayer/FifoRecorder.h
   FreeLookManager.cpp
   FreeLookManager.h
+  Fuzzer.cpp
+  Fuzzer.h
   GeckoCode.cpp
   GeckoCode.h
   GeckoCodeConfig.cpp

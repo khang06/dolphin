@@ -136,6 +136,9 @@ public:
   // main role is to make sure the read function is updated at the same time.
   void ResetMethod(ReadHandlingMethod<T>* method);
 
+  // FUZZER
+  inline bool IsValid() const { return m_Method != nullptr; }
+
 private:
   // Initialize this handler to an invalid handler. Done lazily to avoid
   // useless initialization of thousands of unused handler objects.
@@ -163,6 +166,9 @@ public:
   // main role is to make sure the write function is updated at the same
   // time.
   void ResetMethod(WriteHandlingMethod<T>* method);
+
+  // FUZZER
+  inline bool IsValid() const { return m_Method != nullptr; }
 
 private:
   // Initialize this handler to an invalid handler. Done lazily to avoid

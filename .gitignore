@@ -49,3 +49,8 @@ CMakeLists.txt.user
 CMakeUserPresets.json
 # Ignore FetchContent source directory
 .FetchContent/
+# FUZZER
+Harness/Harness.dol
+Harness/Harness.elf
+Harness/build
+packed/

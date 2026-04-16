@@ -8,6 +8,20 @@
 #include "Common/Logging/Log.h"
 #include "Common/MsgHandler.h"
 
+// FUZZER
+#include "Core/Fuzzer.h"
+
+// FUZZER
+// We don't care lmao
+#define ASSERT_MSG(_t_, _a_, _fmt_, ...)                                                           \
+  do                                                                                               \
+  {                                                                                                \
+    if (!(_a_)) [[unlikely]]                                                                       \
+    {                                                                                              \
+      Fuzzer::ForceFastExit();                                                                     \
+    }                                                                                              \
+  } while (0)
+/*
 #define ASSERT_MSG(_t_, _a_, _fmt_, ...)                                                           \
   do                                                                                               \
   {                                                                                                \
@@ -21,6 +35,7 @@
         Crash();                                                                                   \
     }                                                                                              \
   } while (0)
+*/
 
 #define DEBUG_ASSERT_MSG(_t_, _a_, _fmt_, ...)                                                     \
   do                                                                                               \
@@ -29,6 +44,17 @@
       ASSERT_MSG(_t_, _a_, _fmt_ __VA_OPT__(, ) __VA_ARGS__);                                      \
   } while (0)
 
+// FUZZER
+// We don't care lmao
+#define ASSERT(_a_)                                                                                \
+  do                                                                                               \
+  {                                                                                                \
+    if (!(_a_)) [[unlikely]]                                                                       \
+    {                                                                                              \
+      Fuzzer::ForceFastExit();                                                                     \
+    }                                                                                              \
+  } while (0)
+/*
 #define ASSERT(_a_)                                                                                \
   do                                                                                               \
   {                                                                                                \
@@ -41,6 +67,7 @@
         Crash();                                                                                   \
     }                                                                                              \
   } while (0)
+*/
 
 #define DEBUG_ASSERT(_a_)                                                                          \
   do                                                                                               \

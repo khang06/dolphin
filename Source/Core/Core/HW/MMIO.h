@@ -162,6 +162,9 @@ public:
     return GetWriteHandler<Unit>(UniqueID(addr) / sizeof(Unit));
   }
 
+  // FUZZER
+  void DumpHandlers();
+
 private:
   // These arrays contain the handlers for each MMIO access type: read/write
   // to 8/16/32 bits. They are indexed using the UniqueID(addr) function
@@ -211,6 +214,39 @@ private:
 
     using ArrayType = typename HandlerArray<Unit>::Write;
     return std::get<ArrayType&>(handlers)[index];
+  }
+
+  // FUZZER
+  template <typename Unit>
+  void DumpReadHandlers(HandlerArray<Unit>::Read& handlers)
+  {
+    fmt::print("addrs{}_read = [", sizeof(Unit) * 8);
+    for (size_t i = 0; i < handlers.size(); i++)
+    {
+      auto& handler = handlers[i];
+      if (handler.IsValid())
+      {
+        size_t base = i * sizeof(Unit);
+        fmt::print("0x{:X},", (base >= 0x10000 ? 0xCD000000 : 0xCC000000) | (base & 0xFFFF));
+      }
+    }
+    fmt::println("]");
+  }
+
+  template <typename Unit>
+  void DumpWriteHandlers(HandlerArray<Unit>::Write& handlers)
+  {
+    fmt::print("addrs{}_write = [", sizeof(Unit) * 8);
+    for (size_t i = 0; i < handlers.size(); i++)
+    {
+      auto& handler = handlers[i];
+      if (handler.IsValid())
+      {
+        size_t base = i * sizeof(Unit);
+        fmt::print("0x{:X},", (base >= 0x10000 ? 0xCD000000 : 0xCC000000) | (base & 0xFFFF));
+      }
+    }
+    fmt::println("]");
   }
 };
 
