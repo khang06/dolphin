@@ -137,7 +137,7 @@ void SystemTimersManager::PatchEngineCallback(Core::System& system, u64 userdata
   // We have 2 periods, a 1000 cycle error period and the VI period.
   // We have to carefully combine these together so that we stay on the VI period without drifting.
   u32 vi_interval = system.GetVideoInterface().GetTicksPerField();
-  s64 cycles_pruned = (userdata + cycles_late) % vi_interval;
+  s64 cycles_pruned = (userdata + cycles_late) % std::max(1u, vi_interval);
   s64 next_schedule = 0;
 
   // Try to patch mem and run the Action Replay
