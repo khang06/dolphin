@@ -1223,6 +1223,9 @@ void MMU::GenerateDSIException(u32 effective_address, bool write)
   // DSI exceptions are only supported in MMU mode.
   if (!m_system.IsMMUMode())
   {
+    // FUZZER
+    Fuzzer::ForceFastExit();
+    /*
     if (write)
     {
       PanicAlertFmtT(
@@ -1237,6 +1240,7 @@ void MMU::GenerateDSIException(u32 effective_address, bool write)
           "real hardware. Enable MMU in advanced settings to accurately emulate game crashes.",
           effective_address, m_ppc_state.pc);
     }
+    */
     if (m_system.IsPauseOnPanicMode())
     {
       m_system.GetCPU().Break();

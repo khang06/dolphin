@@ -1,7 +1,7 @@
 #include <gccore.h>
 
 #define FUZZ_MAGIC_WRITE 0xAABBCCDD
-#define FUZZ_PAYLOAD_COUNT 64
+#define FUZZ_PAYLOAD_COUNT 512
 
 #define EVENT_STOP 0
 #define EVENT_READ8 1

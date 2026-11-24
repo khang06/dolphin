@@ -1,4 +1,5 @@
 #include <dlfcn.h>
+#include <unistd.h>
 
 #include "Common/Logging/Log.h"
 #include "Core/HW/MMIO.h"
@@ -7,7 +8,7 @@
 #include "Fuzzer.h"
 
 #define FUZZ_MAGIC_WRITE 0xAABBCCDD
-#define FUZZ_PAYLOAD_COUNT 64
+#define FUZZ_PAYLOAD_COUNT 512
 
 typedef struct
 {
@@ -23,7 +24,7 @@ static void nyx_init_dummy()
 
 static void fast_exit_dummy()
 {
-  fmt::println("nyx_init called");
+  fmt::println("fast_exit called");
 }
 
 static bool s_is_fuzzing = false;
@@ -70,7 +71,7 @@ void RegisterMMIO(MMIO::Mapping* mmio, u32 base)
 
   mmio->Register(
       base, MMIO::InvalidRead<u32>(),
-      MMIO::ComplexWrite<u32>([](Core::System& system_, u32, u32 val) {
+      MMIO::ComplexWrite<u32>([&](Core::System& system_, u32, u32 val) {
         if (!s_is_fuzzing)
         {
           fmt::println("Nyx init triggered, writing payload to 0x{:08X}", val);
@@ -84,16 +85,16 @@ void RegisterMMIO(MMIO::Mapping* mmio, u32 base)
               break;
 
             auto& mem = system_.GetMemory();
-            mem.Write_U32(val + i * sizeof(fuzz_event), Common::swap32(fuzz_event.event));
-            mem.Write_U32(val + i * sizeof(fuzz_event) + 4, Common::swap32(fuzz_event.addr));
-            mem.Write_U32(val + i * sizeof(fuzz_event) + 8, Common::swap32(fuzz_event.value));
+            mem.Write_U32(fuzz_event.event, val + i * sizeof(fuzz_event));
+            mem.Write_U32(fuzz_event.addr, val + i * sizeof(fuzz_event) + 4);
+            mem.Write_U32(fuzz_event.value, val + i * sizeof(fuzz_event) + 8);
           }
         }
         s_is_fuzzing = true;
       }));
 
   mmio->Register(base | 0x4, MMIO::InvalidRead<u32>(),
-                 MMIO::ComplexWrite<u32>([](Core::System&, u32, u32 val) {
+                 MMIO::ComplexWrite<u32>([&](Core::System&, u32, u32 val) {
                    if (s_is_fuzzing && val == FUZZ_MAGIC_WRITE)
                      s_fast_exit();
                  }));

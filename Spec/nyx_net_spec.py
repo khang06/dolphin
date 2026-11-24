@@ -973,6 +973,7 @@ addrs32_write = [
     0xCD0064F4,
     0xCD0064F8,
     0xCD0064FC,
+    # EXI (Wii)
     0xCD006800,
     0xCD006804,
     0xCD006808,
@@ -988,19 +989,13 @@ addrs32_write = [
     0xCD006830,
     0xCD006834,
     0xCD006838,
+    # Audio Interface (Wii)
     0xCD006C00,
     0xCD006C04,
     0xCD006C08,
     0xCD006C0C,
 ]
 
-# Non-Wii mode
-"""
-addrs16_read = [x for x in addrs16_read if (x & 0xFF000000) == 0xCC000000]
-addrs16_write = [x for x in addrs16_write if (x & 0xFF000000) == 0xCC000000]
-addrs32_read = [x for x in addrs32_read if (x & 0xFF000000) == 0xCC000000]
-addrs32_write = [x for x in addrs32_write if (x & 0xFF000000) == 0xCC000000]
-"""
 
 import os
 import sys
