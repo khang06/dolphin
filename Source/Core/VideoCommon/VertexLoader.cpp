@@ -266,8 +266,11 @@ int VertexLoader::RunVertices(const u8* src, u8* dst, int count)
     m_tcIndex = 0;
     m_colIndex = 0;
     m_texmtxwrite = m_texmtxread = 0;
-    for (TPipelineFunction& func : m_PipelineStages)
-      func(this);
+    for (TPipelineFunction& func : m_PipelineStages) {
+      if (func != nullptr) {
+        func(this);
+      }
+    }
     PRIM_LOG("\n");
   }
 
