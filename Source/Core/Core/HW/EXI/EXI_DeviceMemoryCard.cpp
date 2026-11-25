@@ -523,7 +523,14 @@ void CEXIMemoryCard::DoState(PointerWrap& p)
 void CEXIMemoryCard::DMARead(u32 addr, u32 size)
 {
   auto& memory = m_system.GetMemory();
-  m_memory_card->Read(m_address, size, memory.GetPointerForRange(addr, size));
+  u8* ptr = memory.GetPointerForRange(addr, size);
+  if (!ptr)
+  {
+    WARN_LOG_FMT(EXPANSIONINTERFACE, "EXI MEMCARD: invalid DMARead pointer: {:x} {:x}", addr, size);
+    return;
+  }
+
+  m_memory_card->Read(m_address, size, ptr);
 
   if ((m_address + size) % Memcard::BLOCK_SIZE == 0)
   {
@@ -541,7 +548,14 @@ void CEXIMemoryCard::DMARead(u32 addr, u32 size)
 void CEXIMemoryCard::DMAWrite(u32 addr, u32 size)
 {
   auto& memory = m_system.GetMemory();
-  m_memory_card->Write(m_address, size, memory.GetPointerForRange(addr, size));
+  u8* ptr = memory.GetPointerForRange(addr, size);
+  if (!ptr)
+  {
+    WARN_LOG_FMT(EXPANSIONINTERFACE, "EXI MEMCARD: invalid DMAWrite pointer: {:x} {:x}", addr, size);
+    return;
+  }
+
+  m_memory_card->Write(m_address, size, ptr);
 
   if (((m_address + size) % Memcard::BLOCK_SIZE) == 0)
   {
