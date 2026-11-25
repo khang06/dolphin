@@ -330,7 +330,7 @@ void VideoInterfaceManager::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
         u16 value = static_cast<u16>(
             1 + vi.m_h_timing_0.HLW *
                     (system.GetCoreTiming().GetTicks() - vi.m_ticks_last_line_start) /
-                    (vi.GetTicksPerHalfLine()));
+                    (std::max(1u, vi.GetTicksPerHalfLine())));
         return std::clamp<u16>(value, 1, vi.m_h_timing_0.HLW * 2);
       }),
       MMIO::ComplexWrite<u16>([](Core::System& system, u32, u16 val) {
